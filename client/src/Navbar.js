@@ -6,7 +6,7 @@ import logo from './basket.svg';
 import guest from './user_red.png';
 
 
-function Navbar() {
+function Navbar({ setGlobalUser }) {
 
   const [profile, setProfile] = useState(false);
   const [user, setUser] = useState(null);
@@ -30,6 +30,10 @@ function Navbar() {
         .then(res => {
           if(res.data !== 'No User') {
             setUser(res.data);
+            setGlobalUser(res.data);
+          }
+          else {
+            setGlobalUser(null);
           }
         })
         .catch(err => {
@@ -41,13 +45,20 @@ function Navbar() {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, []);
+  }, [setGlobalUser]);
 
 
   // login
   const login = () => {
-      // hard coded here, I'm not satisfied with this!!!
-      history.push('http://localhost:5000/auth/google');
+    // hard coded here, I'm not satisfied with this!!!
+    history.push('http://localhost:5000/auth/google');
+  }
+
+
+  // logout
+  const logout = () => {
+    // hard coded here, I'm not satisfied with this!!!
+    history.push('http://localhost:5000/auth/logout');
   }
 
 
@@ -96,7 +107,11 @@ function Navbar() {
                   </div>
                   <hr className="my-4" />
                   <div className="lead text-center">
-                    <button className="btn btn-primary btn-block text-center" onClick={login}>Login with Google</button>
+                    {user ?                      
+                      <button className="btn btn-primary btn-block text-center" onClick={logout}>Logout</button>
+                          :
+                      <button className="btn btn-primary btn-block text-center" onClick={login}>Google Login</button>
+                    }
                   </div>
                 </div>}
     </div>
