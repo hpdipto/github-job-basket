@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import history from 'history/browser';
+import { Modal } from 'react-bootstrap';
 
 import logo from './basket.svg';
 import guest from './user_red.png';
@@ -9,6 +10,7 @@ import guest from './user_red.png';
 function Navbar({ setGlobalUser }) {
 
   const [profile, setProfile] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [user, setUser] = useState(null);
   const profileRef = useRef(null);
   const jumbotronRef = useRef(null);
@@ -62,6 +64,18 @@ function Navbar({ setGlobalUser }) {
   }
 
 
+  // basket option
+  const basket = () => {
+    if(user) {
+      history.push('/basket');
+    }
+    else {
+      setShowModal(!showModal);
+      console.log(showModal);
+    }
+  }
+
+
 
   return (
     <div>
@@ -76,7 +90,7 @@ function Navbar({ setGlobalUser }) {
 
         <div className="navbar-nav ml-auto">
           <div className="nav-item">
-            <button className="btn"><img src={logo} alt="Logo" className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
+            <button className="btn" onClick={basket}><img src={logo} alt="Logo" className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
           </div>
 
           <div className="nav-item" ref={profileRef}>
@@ -91,29 +105,39 @@ function Navbar({ setGlobalUser }) {
       </nav>
 
       {profile && <div className="jumbotron col-3 login" ref={jumbotronRef}>
-                  <div className="lead text-center mb-3">
-                    {user ?
-                      <img src={user.image} alt="guest" className="img-fluid rounded-circle" width="64" height="64" />
-                          :
-                      <img src={guest} alt="guest" className="img-fluid rounded-circle" width="64" height="64" />
-                    }
-                  </div>
-                  <div className="lead text-center">
-                    {user ?
-                      <h6>{user.displayName}</h6>
-                          :
-                      <h6>Guest</h6>
-                    }
-                  </div>
-                  <hr className="my-4" />
-                  <div className="lead text-center">
-                    {user ?                      
-                      <button className="btn btn-primary btn-block text-center" onClick={logout}>Logout</button>
-                          :
-                      <button className="btn btn-primary btn-block text-center" onClick={login}>Google Login</button>
-                    }
-                  </div>
-                </div>}
+                    <div className="lead text-center mb-3">
+                      {user ?
+                        <img src={user.image} alt="guest" className="img-fluid rounded-circle" width="64" height="64" />
+                            :
+                        <img src={guest} alt="guest" className="img-fluid rounded-circle" width="64" height="64" />
+                      }
+                    </div>
+                    <div className="lead text-center">
+                      {user ?
+                        <h6>{user.displayName}</h6>
+                            :
+                        <h6>Guest</h6>
+                      }
+                    </div>
+                    <hr className="my-4" />
+                    <div className="lead text-center">
+                      {user ?                      
+                        <button className="btn btn-primary btn-block text-center" onClick={logout}>Logout</button>
+                            :
+                        <button className="btn btn-primary btn-block text-center" onClick={login}>Google Login</button>
+                      }
+                    </div>
+                </div>
+      }
+
+      <div>
+        <Modal show={showModal} onHide={() => setShowModal(!showModal)} animation={false} centered>
+          <Modal.Body className="text-center">
+            <h3>Please login first!</h3>
+          </Modal.Body>
+        </Modal>
+      </div>
+
     </div>
   );
 }
