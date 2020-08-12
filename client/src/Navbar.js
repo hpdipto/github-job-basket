@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import history from 'history/browser';
+
 import logo from './basket.svg';
 import guest from './user_red.png';
 
@@ -6,6 +9,7 @@ import guest from './user_red.png';
 function Navbar() {
 
   const [profile, setProfile] = useState(false);
+  const [user, setUser] = useState(null);
   const profileRef = useRef(null);
   const jumbotronRef = useRef(null);
 
@@ -20,11 +24,31 @@ function Navbar() {
   };
 
   useEffect(() => {
+
+    // set user state
+    axios.get('/user/login')
+        .then(res => {
+          if(res.data !== 'No User') {
+            setUser(res.data);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+
+  // login
+  const login = () => {
+      // hard coded here, I'm not satisfied with this!!!
+      history.push('http://localhost:5000/auth/google');
+  }
 
 
 
@@ -45,7 +69,11 @@ function Navbar() {
           </div>
 
           <div className="nav-item" ref={profileRef}>
-            <button className="btn" onClick={() => setProfile(!profile)}><img src={guest} alt="guest" className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
+            {user ?
+              <button className="btn" onClick={() => setProfile(!profile)}><img src={user.image} alt="guest" className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
+                  :
+              <button className="btn" onClick={() => setProfile(!profile)}><img src={guest} alt="guest" className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
+            }
           </div>
         </div>
 
@@ -53,14 +81,22 @@ function Navbar() {
 
       {profile && <div className="jumbotron col-3 login" ref={jumbotronRef}>
                   <div className="lead text-center mb-3">
-                    <img src={guest} alt="guest" className="img-fluid rounded-circle" width="64" height="64" />
+                    {user ?
+                      <img src={user.image} alt="guest" className="img-fluid rounded-circle" width="64" height="64" />
+                          :
+                      <img src={guest} alt="guest" className="img-fluid rounded-circle" width="64" height="64" />
+                    }
                   </div>
                   <div className="lead text-center">
-                    <h6>Guest</h6>
+                    {user ?
+                      <h6>{user.displayName}</h6>
+                          :
+                      <h6>Guest</h6>
+                    }
                   </div>
                   <hr className="my-4" />
                   <div className="lead text-center">
-                    <button className="btn btn-primary btn-block text-center">Login with Google</button>
+                    <button className="btn btn-primary btn-block text-center" onClick={login}>Login with Google</button>
                   </div>
                 </div>}
     </div>
