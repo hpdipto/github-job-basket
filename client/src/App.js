@@ -2,14 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Home from './Home';
+import Basket from './Basket';
 
 
 function App() {
 
   return (
     <Router>
-      <Route exact path="/" component={Home} />
-      {/*<Route exact path="/basket" component={<Basket />} />*/}
+      <Route path="/" exact component={Home} />
+      <Route path="/basket" exact component={Basket} />
     </Router>
   );
 }

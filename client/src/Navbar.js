@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import history from 'history/browser';
+import { useHistory } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 
 import logo from './basket.svg';
@@ -15,6 +15,9 @@ function Navbar({ setGlobalUser }) {
   const profileRef = useRef(null);
   const jumbotronRef = useRef(null);
 
+  const history = useHistory();
+
+
   // detectin click event and close profile jumbotron
   // source: https://stackoverflow.com/a/54392243/9481106
   const handleClickOutside = event => {
@@ -25,6 +28,7 @@ function Navbar({ setGlobalUser }) {
     }
   };
 
+
   useEffect(() => {
 
     // set user state
@@ -33,9 +37,6 @@ function Navbar({ setGlobalUser }) {
           if(res.data !== 'No User') {
             setUser(res.data);
             setGlobalUser(res.data);
-          }
-          else {
-            setGlobalUser(null);
           }
         })
         .catch(err => {
@@ -50,17 +51,24 @@ function Navbar({ setGlobalUser }) {
   }, [setGlobalUser]);
 
 
+  // home
+  const home = () => {
+    //window.location.href = 'http://localhost:3000';
+    history.push('/');
+  }
+
+
   // login
   const login = () => {
     // hard coded here, I'm not satisfied with this!!!
-    history.push('http://localhost:5000/auth/google');
+    window.location.href = 'http://localhost:5000/auth/google';
   }
 
 
   // logout
   const logout = () => {
     // hard coded here, I'm not satisfied with this!!!
-    history.push('http://localhost:5000/auth/logout');
+    window.location.href = 'http://localhost:5000/auth/logout';
   }
 
 
@@ -71,7 +79,6 @@ function Navbar({ setGlobalUser }) {
     }
     else {
       setShowModal(!showModal);
-      console.log(showModal);
     }
   }
 
@@ -79,28 +86,28 @@ function Navbar({ setGlobalUser }) {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+      <nav className="navbar navbar-expand flex-column flex-md-row navbar-dark bg-primary">
 
-        <div className="navbar-brand">
+        <div className="navbar-brand logo" onClick={home}>
           <h4 style={{fontFamily: "Bitter"}}>
             <img src={logo} alt="Logo" className="img-fluid m-2" width="35" />
             Job Basket
           </h4>
         </div>
 
-        <div className="navbar-nav ml-auto">
-          <div className="nav-item">
+        <ul className="navbar-nav ml-auto">
+          <li className="nav-item">
             <button className="btn" onClick={basket}><img src={logo} alt="Logo" className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
-          </div>
+          </li>
 
-          <div className="nav-item" ref={profileRef}>
+          <li className="nav-item" ref={profileRef}>
             {user ?
-              <button className="btn" onClick={() => setProfile(!profile)}><img src={user.image} alt="guest" className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
+              <button className="btn" onClick={() => setProfile(!profile)}><img src={user.image} alt="user" className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
                   :
               <button className="btn" onClick={() => setProfile(!profile)}><img src={guest} alt="guest" className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
             }
-          </div>
-        </div>
+          </li>
+        </ul>
 
       </nav>
 
@@ -125,6 +132,7 @@ function Navbar({ setGlobalUser }) {
                         <button className="btn btn-primary btn-block text-center" onClick={logout}>Logout</button>
                             :
                         <button className="btn btn-primary btn-block text-center" onClick={login}>Google Login</button>
+                        /*<a href="http://localhost:5000/auth/google" className="btn btn-primary btn-block text-center">Google Login</a>*/
                       }
                     </div>
                 </div>
@@ -133,7 +141,7 @@ function Navbar({ setGlobalUser }) {
       <div>
         <Modal show={showModal} onHide={() => setShowModal(!showModal)} animation={false} centered>
           <Modal.Body className="text-center">
-            <h3>Please login first!</h3>
+            <h4>Please login first!</h4>
           </Modal.Body>
         </Modal>
       </div>

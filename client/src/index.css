@@ -17,3 +17,7 @@ code {
 .login {
   float: right;
 }
+
+.logo:hover {
+  cursor: pointer;
+}

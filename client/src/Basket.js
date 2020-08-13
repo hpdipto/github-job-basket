@@ -2,22 +2,20 @@ import React, { useState } from 'react';
 
 import Navbar from './Navbar';
 
-function Home() {
+function Basket() {
 
     const [globalUser, setGlobalUser] = useState(null);
 
     return (
         <div>
             <Navbar setGlobalUser={setGlobalUser} />
-            {globalUser ? 
-                <h4>Hello, {globalUser.firstName}</h4>
+            {globalUser ?
+                <h4>{globalUser.firstName}'s Basket</h4>
                         :
                 null
             }
         </div>
     );
-
 }
 
-
-export default Home;
+export default Basket;
