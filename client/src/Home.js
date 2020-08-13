@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import Navbar from './Navbar';
+import GitHubJobs from './github/GitHubJobs';
 
 function Home() {
 
@@ -14,6 +15,7 @@ function Home() {
                         :
                 null
             }
+            <GitHubJobs />
         </div>
     );
 
