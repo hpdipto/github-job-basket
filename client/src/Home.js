@@ -15,7 +15,9 @@ function Home() {
                         :
                 null
             }
-            <GitHubJobs />
+            <div className="container">
+                <GitHubJobs />
+            </div>
         </div>
     );
 
