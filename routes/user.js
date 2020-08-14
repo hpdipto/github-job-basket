@@ -18,17 +18,30 @@ router.get('/login', (req, res) => {
 
 
 // @desc  Save a job in user's basket
-// @route GET /user/basket/save/:jobId
-router.get('/basket/save/:jobId', async (req, res) => {
+// @route POST /user/basket/save/:jobId
+router.post('/basket/save/:jobId', async (req, res) => {
+    
     if(req.user) {
         try {
             const user = await GitHubJobForUser.findOne({ userId: req.user.id });
-
-            // if no user found, create user and add jobId
+            
+            // if no user found, create user and add job
             if(!user) {
                 const gitHubJobsForUser = new GitHubJobForUser({
                     userId: req.user.id,
-                    githubIds: [req.params.jobId]
+                    githubJobs: [
+                        {
+                            id: req.body.id,
+                            type: req.body.type,
+                            created_at: req.body.created_at,
+                            company: req.body.company,
+                            location: req.body.location,
+                            title: req.body.title,
+                            description: req.body.description,
+                            how_to_apply: req.body.how_to_apply,
+                            company_logo: req.body.company_logo
+                        }
+                    ]
                 });
 
                 try {
@@ -41,12 +54,25 @@ router.get('/basket/save/:jobId', async (req, res) => {
             }
             // else update githubIds
             else {
-                let githubIds = [...user.githubIds, req.params.jobId];
-                user.githubIds = githubIds;
+                let githubJobs = [
+                    ...user.githubJobs,
+                    {
+                        id: req.body.id,
+                        type: req.body.type,
+                        created_at: req.body.created_at,
+                        company: req.body.company,
+                        location: req.body.location,
+                        title: req.body.title,
+                        description: req.body.description,
+                        how_to_apply: req.body.how_to_apply,
+                        company_logo: req.body.company_logo
+                    }
+                ]
+                user.githubJobs = githubJobs;
 
                 try {
                     const updateJob = await user.save();
-                    res.send('Updated!');
+                    res.send('Updated');
                 }
                 catch(err) {
                     console.error(err);
@@ -73,9 +99,9 @@ router.get('/basket/:jobId', async (req, res) => {
 
             // check for logged in user
             if(user) {
-                const githubIds = user.githubIds;
-                githubIds.forEach(gIds => {
-                    if(gIds === req.params.jobId) {
+                const githubJobs = user.githubJobs;
+                githubJobs.forEach(job => {
+                    if(job.id === req.params.jobId) {
                         return res.send(true);
                     }
                 });

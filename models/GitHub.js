@@ -5,7 +5,7 @@ const GitHubJobForUser = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    githubIds: {
+    githubJobs: {
         type: []
     },
     lastCreatedAt: {

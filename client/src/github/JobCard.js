@@ -13,6 +13,7 @@ function JobCard({ job }) {
     const [applyModal, setApplyModal] = useState(false);
     const [noUserModal, setNoUserModal] = useState(false);
     const [jobAlreadySaved, setJobAlreadySaved] = useState(false);
+    const [jobSaved, setJobSaved] = useState(false);
 
 
     const cancelToken = axios.CancelToken.source();
@@ -40,17 +41,39 @@ function JobCard({ job }) {
 
     // save the job
     const basketIt = () => {
-        axios.get(`/user/basket/save/${job.id}`)
-                .then(res => {
-                    console.log(res.data);
-                    if(res.data === 'No User') {
-                        setNoUserModal(true);
-                    }
 
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+        // save it as quickly as possible
+        // if any error occurs, we'll revoke it
+        setJobSaved(true);
+
+        let jobInfo = {
+            id: job.id,
+            type: job.type,
+            created_at: job.created_at,
+            company: job.company,
+            location: job.location,
+            title: job.title,
+            description: job.description,
+            how_to_apply: job.how_to_apply,
+            company_logo: job.company_logo
+        };
+
+        axios.post(`/user/basket/save/${job.id}`, jobInfo)
+            .then(res => {
+              if(res.data === 'No User') {
+                setNoUserModal(true);
+              }
+
+              // confirmed that job is saved
+              if(res.data === 'Saved' || res.data === 'Updated') {
+                setJobSaved(true);
+              }
+            })
+            .catch(err => {
+              console.log(err);
+              setJobSaved(false);
+            });
+                
     }
 
 
@@ -95,7 +118,7 @@ function JobCard({ job }) {
                             </button>
                         </div>
                         <div className="col">
-                            <button className="btn btn-primary btn-block" onClick={basketIt} disabled={jobAlreadySaved}><img src={basket} alt="basket" width="20" /> Basket it! </button>
+                            <button className="btn btn-primary btn-block" onClick={basketIt} disabled={jobAlreadySaved || jobSaved}><img src={basket} alt="basket" width="20" /> Basket it! </button>
                         </div>
                     </div>
                 </div>

@@ -34,7 +34,11 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: new MongoStore({ mongooseConnection: mongoose.connection })
-}))
+}));
+
+
+// JSON parser (body-parser)
+app.use(express.json());
 
 
 // Passport middleware
