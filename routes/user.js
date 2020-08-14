@@ -68,17 +68,22 @@ router.get('/basket/save/:jobId', async (req, res) => {
 router.get('/basket/:jobId', async (req, res) => {
 
     try {
-        const user = await GitHubJobForUser.findOne({ userId: req.user.id });
+        if(req.user) {
+            const user = await GitHubJobForUser.findOne({ userId: req.user.id });
 
-        // check for logged in user
-        if(user) {
-            const githubIds = user.githubIds;
-            githubIds.forEach(gIds => {
-                if(gIds === req.params.jobId) {
-                    return res.send(true);
-                }
-            });
-            return res.send(false);
+            // check for logged in user
+            if(user) {
+                const githubIds = user.githubIds;
+                githubIds.forEach(gIds => {
+                    if(gIds === req.params.jobId) {
+                        return res.send(true);
+                    }
+                });
+                return res.send(false);
+            }
+        }
+        else {
+            // do nothing
         }
     }
     catch(err) {

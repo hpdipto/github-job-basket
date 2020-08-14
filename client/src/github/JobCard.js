@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
 import { Modal } from 'react-bootstrap';
 
 import basket from './basket.png';
@@ -103,17 +104,30 @@ function JobCard({ job }) {
 
 
             <div>
-                <Modal show={detailsModal} onHide={() => setDetailsModal(!detailsModal)} animation={false} centered>
-                  <Modal.Body className="text-center">
-                    {job.description}
+                <Modal show={detailsModal} onHide={() => setDetailsModal(!detailsModal)} size="lg" animation={false} centered>
+                  <Modal.Header closeButton>
+                    <Modal.Title>
+                      Job Description
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <ReactMarkdown source={job.description} escapeHtml={false}/>
                   </Modal.Body>
+                  <Modal.Footer>
+                    <button className="btn btn-secondary" onClick={() => setDetailsModal(!detailsModal)} >Close</button>
+                  </Modal.Footer>
                 </Modal>
             </div>
 
             <div>
                 <Modal show={applyModal} onHide={() => setApplyModal(!applyModal)} animation={false} centered>
-                  <Modal.Body className="text-center">
-                    {job.how_to_apply}
+                  <Modal.Header closeButton>
+                    <Modal.Title>
+                      How to Apply
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body className="text-center" style={{ wordBreak: 'break-all' }}>
+                    <ReactMarkdown source={job.how_to_apply} escapeHtml={false} linkTarget="_blank" />
                   </Modal.Body>
                 </Modal>
             </div>

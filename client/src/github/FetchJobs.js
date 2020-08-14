@@ -30,6 +30,7 @@ function FetchJobs(params, page) {
     const [state, dispatch] = useReducer(reducer, { loading: true, hasNextPage: false, jobs: [] });
 
     const URL = 'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json';
+    // const URL = 'https://jobs.github.com/positions.json';
 
     const cancelToken1 = axios.CancelToken.source()
     const cancelToken2 = axios.CancelToken.source()
