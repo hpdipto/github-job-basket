@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import axios from 'axios';
 import { Modal } from 'react-bootstrap';
 
 import basket from './basket.png';
@@ -9,6 +10,48 @@ function JobCard({ job }) {
 
     const [detailsModal, setDetailsModal] = useState(false);
     const [applyModal, setApplyModal] = useState(false);
+    const [noUserModal, setNoUserModal] = useState(false);
+    const [jobAlreadySaved, setJobAlreadySaved] = useState(false);
+
+
+    const cancelToken = axios.CancelToken.source();
+
+    useEffect(() => {
+
+        // check it the job already saved or not
+        axios.get(`/user/basket/${job.id}`, { cancelToken: cancelToken.token })
+                .then(res => {
+                    // if res.data = true, change jobAlreadySaved's value
+                    if(res.data)
+                        setJobAlreadySaved(true);
+                })
+                .catch(err => {
+                    // do nothing
+                    if(axios.isCancel(err)) return;
+                    return ;
+                });
+
+        return () => {
+            cancelToken.cancel();
+        }
+
+    })
+
+    // save the job
+    const basketIt = () => {
+        axios.get(`/user/basket/save/${job.id}`)
+                .then(res => {
+                    console.log(res.data);
+                    if(res.data === 'No User') {
+                        setNoUserModal(true);
+                    }
+
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+    }
+
 
     return (
         <div>    
@@ -47,11 +90,11 @@ function JobCard({ job }) {
                     <div className="row mt-2">
                         <div className="col">
                             <button className="btn btn-secondary btn-block" onClick={() => setApplyModal(!applyModal)}>
-                                <i class="fa fa-question-circle" aria-hidden="true"></i> How to Apply
+                                <i className="fa fa-question-circle" aria-hidden="true"></i> How to Apply
                             </button>
                         </div>
                         <div className="col">
-                            <button className="btn btn-primary btn-block"><img src={basket} alt="basket" width="20" /> Basket it! </button>
+                            <button className="btn btn-primary btn-block" onClick={basketIt} disabled={jobAlreadySaved}><img src={basket} alt="basket" width="20" /> Basket it! </button>
                         </div>
                     </div>
                 </div>
@@ -74,6 +117,15 @@ function JobCard({ job }) {
                   </Modal.Body>
                 </Modal>
             </div>
+
+            <div>
+                <Modal show={noUserModal} onHide={() => setNoUserModal(!noUserModal)} animation={false} centered>
+                  <Modal.Body className="text-center">
+                    <h3>Please login first</h3>
+                  </Modal.Body>
+                </Modal>
+            </div>
+
         </div>
         
     );
