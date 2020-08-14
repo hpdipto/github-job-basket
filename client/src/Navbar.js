@@ -86,7 +86,7 @@ function Navbar({ setGlobalUser }) {
 
   return (
     <div>
-      <nav className="navbar navbar-expand flex-column flex-md-row navbar-dark bg-primary">
+      <nav className="navbar navbar-expand flex-column flex-md-row navbar-dark bg-primary bd-navbar">
 
         <div className="navbar-brand logo" onClick={home}>
           <h4 style={{fontFamily: "Bitter"}}>

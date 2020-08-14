@@ -62,6 +62,7 @@ function JobCard({ job }) {
             .then(res => {
               if(res.data === 'No User') {
                 setNoUserModal(true);
+                setJobSaved(false);
               }
 
               // confirmed that job is saved

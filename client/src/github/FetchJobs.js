@@ -14,9 +14,9 @@ function reducer(state, action) {
         case ACTIONS.INITIALIZE:
             return { loading: true, hasNextPage: false, jobs: [] }
         case ACTIONS.GET_DATA:
-            return { loading: false, hasNextPage: false, jobs: action.payload.jobs }
+            return { ...state, loading: false, jobs: action.payload.jobs }
         case ACTIONS.ERROR:
-            return { loading: false, error: action.payload.error, hasNextPage: false, jobs: [] }
+            return { ...state, loading: false, error: action.payload.error, jobs: [] }
         case ACTIONS.UPDATE_HAS_NEXT_PAGE:
             return { ...state, hasNextPage: action.payload.hasNextPage }
         default:

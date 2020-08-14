@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import FetchJobs from './FetchJobs';
 import JobCard from './JobCard';
+import JobPagination from './JobPagination';
 
 function GitHubJobs() {
 
@@ -9,6 +10,8 @@ function GitHubJobs() {
   const [params, setParams] = useState({});
 
   const { jobs, loading, error, hasNextPage } = FetchJobs(params, page);
+
+  console.log({ jobs: jobs, loading: loading, error: error, hasNextPage: hasNextPage });
 
 
   // const Job = {
@@ -29,11 +32,23 @@ function GitHubJobs() {
   return (
     <div>
       {/*<JobCard job={Job} />*/}
+
+      <div className="mt-3">
+        <JobPagination page={page} setPage={setPage} hasNextPage={hasNextPage} />
+      </div>
+
       {
         loading ? 
           <h4>Loading...</h4>
                 :
-        null
+          null
+      }
+
+      {
+        error ? 
+          <h4>Error! Try Refreshing.</h4>
+              :
+          null
       }
 
       {
@@ -41,6 +56,10 @@ function GitHubJobs() {
           <JobCard job={job}/>
         )
       }
+      <div className="mt-3">
+        <JobPagination page={page} setPage={setPage} hasNextPage={hasNextPage} />
+      </div>
+
     </div>
   );
 
