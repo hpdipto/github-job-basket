@@ -65,8 +65,8 @@ function GitHubJobs() {
       }
 
       {
-        jobs.map(job => 
-          <JobCard job={job}/>
+        jobs.map((job, index) => 
+          <JobCard key={index} job={job} />
         )
       }
 

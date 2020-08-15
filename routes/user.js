@@ -27,7 +27,7 @@ router.post('/basket/save/:jobId', async (req, res) => {
             
             // if no user found, create user and add job
             if(!user) {
-                const gitHubJobsForUser = new GitHubJobForUser({
+                const jobsForUser = new GitHubJobForUser({
                     userId: req.user.id,
                     githubJobs: [
                         {
@@ -45,7 +45,7 @@ router.post('/basket/save/:jobId', async (req, res) => {
                 });
 
                 try {
-                    const saveJob = await gitHubJobsForUser.save();
+                    const saveJob = await jobsForUser.save();
                     res.send('Saved');
                 }
                 catch(err) {
@@ -136,6 +136,33 @@ router.get('/basket', async (req, res) => {
             res.send('No User');
         }
     }
+    catch(err) {
+        console.error(err);
+    }
+});
+
+
+// @desc   Update jobs of the user
+// @route  POST /user/basket/update
+router.post('/basket/update', async (req, res) => {
+
+    try {
+        if(req.user) {
+            const user = await GitHubJobForUser.findOne({ userId: req.user.id });
+
+            // check for logged in user
+            if(user) {
+                const githubJobs = req.body;
+                user.githubJobs = githubJobs;
+
+                const update = await user.save();
+                res.send('Updated');
+            }
+        }
+        else {
+            res.send('No User');
+        }
+    }   
     catch(err) {
         console.error(err);
     }
