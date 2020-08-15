@@ -90,10 +90,11 @@ function Navbar({ setGlobalUser }) {
 
         <div className="navbar-brand logo" onClick={home}>
           <h4 style={{fontFamily: "Bitter"}}>
-            <img src={logo} alt="Logo" className="img-fluid m-2" width="35" />
-            Job Basket
+            <img src={logo} alt="Logo" className="img-fluid mr-2" width="35" />
+            GitHub Job Basket
           </h4>
         </div>
+
 
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
