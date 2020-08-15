@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import axios from 'axios';
 
 const ACTIONS = {
@@ -32,10 +32,11 @@ function FetchJobs(params, page) {
     const URL = 'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json';
     // const URL = 'https://jobs.github.com/positions.json';
 
-    const cancelToken1 = axios.CancelToken.source()
-    const cancelToken2 = axios.CancelToken.source()
 
     useEffect(() => {
+        const cancelToken1 = axios.CancelToken.source();
+        const cancelToken2 = axios.CancelToken.source();
+
         dispatch({ type: ACTIONS.INITIALIZE });
 
         axios.get(URL, {
