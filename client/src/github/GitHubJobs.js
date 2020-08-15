@@ -40,7 +40,7 @@ function GitHubJobs() {
 
 
   return (
-    <div>
+    <div className="container">
     
       <div className="mt-3">
         <SearchForm params={params} onParamChange={handleParamChange} />

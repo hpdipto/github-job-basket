@@ -109,7 +109,31 @@ router.get('/basket/:jobId', async (req, res) => {
             }
         }
         else {
-            // do nothing
+            res.send('No User');
+        }
+    }
+    catch(err) {
+        console.error(err);
+    }
+});
+
+
+// @desc   Get all the jobs of the user
+// @route  GET /user/basket
+router.get('/basket', async (req, res) => {
+
+    try {
+        if(req.user) {
+            const user = await GitHubJobForUser.findOne({ userId: req.user.id });
+
+            // check for logged in user
+            if(user) {
+                const githubJobs = user.githubJobs;
+                res.json(githubJobs);
+            }
+        }
+        else {
+            res.send('No User');
         }
     }
     catch(err) {
