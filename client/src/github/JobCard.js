@@ -21,10 +21,10 @@ function JobCard({ job }) {
     useEffect(() => {
 
         // check it the job already saved or not
-        axios.get(`/user/basket/${job.id}`, { cancelToken: cancelToken.token })
+        axios.get(`/user/basket/github/${job.id}`, { cancelToken: cancelToken.token })
                 .then(res => {
                     // if res.data = true, change jobAlreadySaved's value
-                    if(res.data)
+                    if(res.data === true)
                         setJobAlreadySaved(true);
                 })
                 .catch(err => {
@@ -37,7 +37,8 @@ function JobCard({ job }) {
             cancelToken.cancel();
         }
 
-    })
+    });
+    
 
     // save the job
     const basketIt = () => {
@@ -58,7 +59,7 @@ function JobCard({ job }) {
             company_logo: job.company_logo
         };
 
-        axios.post(`/user/basket/save/${job.id}`, jobInfo)
+        axios.post(`/user/basket/github/save/${job.id}`, jobInfo)
             .then(res => {
               if(res.data === 'No User') {
                 setNoUserModal(true);

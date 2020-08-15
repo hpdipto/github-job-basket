@@ -14,7 +14,7 @@ function JobBasket() {
     useEffect(() => {
         const cancelToken = axios.CancelToken.source();
 
-        axios.get(`/user/basket`, { cancelToken: cancelToken.token })
+        axios.get(`/user/basket/github`, { cancelToken: cancelToken.token })
             .then(res => {
                 setJobs(res.data);
             })
@@ -31,30 +31,25 @@ function JobBasket() {
 
 
     useEffect(() => {
-        const cancelToken = axios.CancelToken.source();
 
         if(trashIndex !== null) {
             var currentJobs = [...jobs];
             currentJobs.splice(trashIndex, 1);
             setJobs(currentJobs);
             setTrashIndex(null);
+
             
             // update job on server side
-            axios.post(`user/basket/update`, currentJobs, { cancelToken: cancelToken.token })
+            axios.post(`user/basket/github/update`, currentJobs)
                 .then(res => {
-                    
+                    console.log(res.data);
                 })
                 .catch(err => {
                     console.log(err);
                 })
         }
 
-
-        return () => {
-            cancelToken.cancel();
-        }
-
-    }, [trashIndex]);
+    }, [trashIndex, jobs]);
 
 
 

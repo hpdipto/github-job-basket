@@ -18,8 +18,8 @@ router.get('/login', (req, res) => {
 
 
 // @desc  Save a job in user's basket
-// @route POST /user/basket/save/:jobId
-router.post('/basket/save/:jobId', async (req, res) => {
+// @route POST /user/basket/github/save/:jobId
+router.post('/basket/github/save/:jobId', async (req, res) => {
     
     if(req.user) {
         try {
@@ -54,22 +54,34 @@ router.post('/basket/save/:jobId', async (req, res) => {
             }
             // else update githubIds
             else {
-                let githubJobs = [
-                    ...user.githubJobs,
-                    {
-                        id: req.body.id,
-                        type: req.body.type,
-                        created_at: req.body.created_at,
-                        company: req.body.company,
-                        location: req.body.location,
-                        title: req.body.title,
-                        description: req.body.description,
-                        how_to_apply: req.body.how_to_apply,
-                        company_logo: req.body.company_logo
+                let githubJobs = [...user.githubJobs];
+                let newJob = {
+                    id: req.body.id,
+                    type: req.body.type,
+                    created_at: req.body.created_at,
+                    company: req.body.company,
+                    location: req.body.location,
+                    title: req.body.title,
+                    description: req.body.description,
+                    how_to_apply: req.body.how_to_apply,
+                    company_logo: req.body.company_logo
+                };
+
+                // check if newJob already exists or not
+                var index = 0;
+                for(index = 0; index < githubJobs.length; index++) {
+                    if(githubJobs[index].id == newJob.id) {
+                        break;
                     }
-                ]
+                }
+                // job doesn't exist
+                if(index === githubJobs.length) {
+                    githubJobs.push(newJob);
+                }
+
                 user.githubJobs = githubJobs;
 
+                
                 try {
                     const updateJob = await user.save();
                     res.send('Updated');
@@ -90,8 +102,8 @@ router.post('/basket/save/:jobId', async (req, res) => {
 
 
 // @desc   Check if a job already saved or not
-// @route  Get /user/basket/:jobId
-router.get('/basket/:jobId', async (req, res) => {
+// @route  Get /user/basket/github/:jobId
+router.get('/basket/github/:jobId', async (req, res) => {
 
     try {
         if(req.user) {
@@ -100,12 +112,16 @@ router.get('/basket/:jobId', async (req, res) => {
             // check for logged in user
             if(user) {
                 const githubJobs = user.githubJobs;
-                githubJobs.forEach(job => {
-                    if(job.id === req.params.jobId) {
+                var index = 0;
+                for(index = 0; index < githubJobs.length; index++) {
+                    if(githubJobs[index].id == req.params.jobId) {
                         return res.send(true);
+                        break;
                     }
-                });
-                return res.send(false);
+                }
+                if(index === githubJobs.length) {
+                    return res.send(false);
+                }
             }
         }
         else {
@@ -113,14 +129,16 @@ router.get('/basket/:jobId', async (req, res) => {
         }
     }
     catch(err) {
+        console.log(req.params.jobId);
         console.error(err);
     }
 });
 
 
+
 // @desc   Get all the jobs of the user
-// @route  GET /user/basket
-router.get('/basket', async (req, res) => {
+// @route  GET /user/basket/github
+router.get('/basket/github', async (req, res) => {
 
     try {
         if(req.user) {
@@ -144,7 +162,7 @@ router.get('/basket', async (req, res) => {
 
 // @desc   Update jobs of the user
 // @route  POST /user/basket/update
-router.post('/basket/update', async (req, res) => {
+router.post('/basket/github/update', async (req, res) => {
 
     try {
         if(req.user) {

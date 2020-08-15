@@ -10,6 +10,11 @@ function Home() {
     return (
         <div style={{background: "#dae4f5"}}>
             <Navbar setGlobalUser={setGlobalUser} />
+            {globalUser ?
+                <h4 className="container mt-2">Hi, {globalUser.firstName}!</h4>
+                        :
+                null
+            }
             <GitHubJobs />
         </div>
 
