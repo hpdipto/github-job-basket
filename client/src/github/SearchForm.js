@@ -34,7 +34,7 @@ function SearchForm({ params, onParamChange }) {
                                 <input type="checkbox" value={params.full_time} onChange={onParamChange} name="full_time" id="full_time" />
                             </div>
                         </div>
-                        <span className="border col"><label htmlFor="full_time" className="mx-3 mt-1">Full Time</label></span>
+                        <span className="border col" style={{background: "white"}}><label htmlFor="full_time" className="mx-3 mt-1">Full Time</label></span>
                     </div>
                 </div>
 

@@ -41,8 +41,7 @@ function GitHubJobs() {
 
   return (
     <div>
-      {/*<JobCard job={Job} />*/}
-
+    
       <div className="mt-3">
         <SearchForm params={params} onParamChange={handleParamChange} />
       </div>

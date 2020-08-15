@@ -8,7 +8,7 @@ function Home() {
     const [globalUser, setGlobalUser] = useState(null);
 
     return (
-        <div>
+        <div style={{background: "#dae4f5"}}>
             <Navbar setGlobalUser={setGlobalUser} />
             {globalUser ? 
                 <h4>Hello, {globalUser.firstName}</h4>
@@ -19,6 +19,7 @@ function Home() {
                 <GitHubJobs />
             </div>
         </div>
+
     );
 
 }
