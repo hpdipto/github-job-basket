@@ -26,3 +26,7 @@ p {
 .logo:hover {
   cursor: pointer;
 }
+
+
+/*for sticky navbar
+https://stackoverflow.com/a/49650313/9481106*/

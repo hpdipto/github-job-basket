@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import FetchJobs from './FetchJobs';
 import JobCard from './JobCard';
+import SearchForm from './SearchForm';
 import JobPagination from './JobPagination';
 
 function GitHubJobs() {
@@ -9,9 +10,18 @@ function GitHubJobs() {
   const [page, setPage] = useState(1);
   const [params, setParams] = useState({});
 
+  const handleParamChange = (e) => {
+    const param = e.target.name;
+    const value = e.target.value;
+    setPage(1);
+    setParams(prevParams => {
+      return {...prevParams, [param]: value}
+    })
+  }
+
   const { jobs, loading, error, hasNextPage } = FetchJobs(params, page);
 
-  console.log({ jobs: jobs, loading: loading, error: error, hasNextPage: hasNextPage });
+  // console.log({ jobs: jobs, loading: loading, error: error, hasNextPage: hasNextPage });
 
 
   // const Job = {
@@ -34,6 +44,10 @@ function GitHubJobs() {
       {/*<JobCard job={Job} />*/}
 
       <div className="mt-3">
+        <SearchForm params={params} onParamChange={handleParamChange} />
+      </div>
+
+      <div className="mt-1">
         <JobPagination page={page} setPage={setPage} hasNextPage={hasNextPage} />
       </div>
 
@@ -56,6 +70,7 @@ function GitHubJobs() {
           <JobCard job={job}/>
         )
       }
+
       <div className="mt-3">
         <JobPagination page={page} setPage={setPage} hasNextPage={hasNextPage} />
       </div>
