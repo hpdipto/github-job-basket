@@ -61,8 +61,6 @@ app.use('/auth', require('./routes/auth'));
 
 
 // Front-end connected
-app.use(express.static(path.join(__dirname, 'build')));
-
 app.use(express.static('client/build'));
 
 app.get('*', (req, res) => {
