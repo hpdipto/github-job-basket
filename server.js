@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -56,6 +57,15 @@ if(process.env.NODE_ENV === 'development') {
 // Routes
 app.use('/user', require('./routes/user'));
 app.use('/auth', require('./routes/auth'));
+
+
+
+// Front-end connected
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 
 

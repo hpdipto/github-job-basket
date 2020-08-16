@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 
 import logo from './basket.svg';
-import guest from './user_red.png';
+import guest from './user_pic.png';
+import backend from './backend.json';
 
 
 function Navbar({ setGlobalUser }) {
@@ -53,7 +54,6 @@ function Navbar({ setGlobalUser }) {
 
   // home
   const home = () => {
-    //window.location.href = 'http://localhost:3000';
     history.push('/');
   }
 
@@ -61,14 +61,14 @@ function Navbar({ setGlobalUser }) {
   // login
   const login = () => {
     // hard coded here, I'm not satisfied with this!!!
-    window.location.href = 'http://localhost:5000/auth/google';
+    window.location.href = `${backend.server}/auth/google`;
   }
 
 
   // logout
   const logout = () => {
     // hard coded here, I'm not satisfied with this!!!
-    window.location.href = 'http://localhost:5000/auth/logout';
+    window.location.href = `${backend.server}/auth/logout`;
   }
 
 
@@ -103,7 +103,7 @@ function Navbar({ setGlobalUser }) {
 
           <li className="nav-item" ref={profileRef}>
             {user ?
-              <button className="btn" onClick={() => setProfile(!profile)}><img src={user.image} alt="user" className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
+              <button className="btn" onClick={() => setProfile(!profile)}><img src={user.image} alt={user.familyName} className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
                   :
               <button className="btn" onClick={() => setProfile(!profile)}><img src={guest} alt="guest" className="img-fluid m-1 rounded-circle" width="32" height="32" /></button>
             }
@@ -112,12 +112,12 @@ function Navbar({ setGlobalUser }) {
 
       </nav>
 
-      {profile && <div className="jumbotron col-3 login" ref={jumbotronRef}>
+      {profile && <div className="jumbotron login login-panel" ref={jumbotronRef}>
                     <div className="lead text-center mb-3">
                       {user ?
-                        <img src={user.image} alt="guest" className="img-fluid rounded-circle" width="64" height="64" />
+                        <img src={user.image} alt={user.familyName} className="img-fluid rounded-circle" width="90" />
                             :
-                        <img src={guest} alt="guest" className="img-fluid rounded-circle" width="64" height="64" />
+                        <img src={guest} alt="guest" className="img-fluid rounded-circle" width="90" />
                       }
                     </div>
                     <div className="lead text-center">
@@ -132,7 +132,7 @@ function Navbar({ setGlobalUser }) {
                       {user ?                      
                         <button className="btn btn-primary btn-block text-center" onClick={logout}>Logout</button>
                             :
-                        <button className="btn btn-primary btn-block text-center" onClick={login}>Google Login</button>
+                        <button className="btn btn-primary btn-block text-center" onClick={login}><i className="fa fa-google mr-1" aria-hidden="true"></i> Login</button>
                         /*<a href="http://localhost:5000/auth/google" className="btn btn-primary btn-block text-center">Google Login</a>*/
                       }
                     </div>
