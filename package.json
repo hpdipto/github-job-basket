@@ -4,7 +4,7 @@
   "description": "A project that utilizes various job APIs",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
+    "start": "cross-env NODE_ENV=production node server",
     "dev": "cross-env NODE_ENV=development nodemon server"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "dependencies": {
     "connect-mongo": "^3.2.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
